@@ -8,13 +8,14 @@ class Physeng
         @y = y
         @xvel = xvel
         @yvel = yvel
+        @color = [0, 255, 0]
       end
 
       def paint(screen)
         screenx = @x * screen.w
         screeny = @y * screen.h
-        screen.put_pixel(screenx, screeny, screen.map_rgb(0, 255, 0))
-        return [screenx, screeny, 1, 1]
+        screen.fill_rect screenx-1, screeny-1, 3, 3, screen.map_rgb(*@color)
+        return [screenx-1, screeny-1, 3, 3]
       end
 
       def move!
