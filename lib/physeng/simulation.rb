@@ -32,7 +32,7 @@ class Physeng
       while SDL::get_ticks < 10000
         elapsed = wait_till_next_frame
         clear_screen
-        dirty = paint @particles, elapsed
+        paint @particles, elapsed
         collide @particles
         @screen.flip
       end
@@ -65,10 +65,9 @@ class Physeng
     end
 
     def paint(paintables, time_elapsed)
-      paintables.inject([]) do |rects,p|
-        dirty = p.paint @screen
+      paintables.each do |p|
+        p.paint @screen
         p.move! time_elapsed
-        rects << dirty
       end
     end
 
