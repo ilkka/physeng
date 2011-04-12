@@ -11,7 +11,7 @@ class Physeng
           #raise Trollop::HelpNeeded if arguments.empty?
           o
         end
-        0
+        return Physeng::Simulation.new.run
       end
     end
   end
