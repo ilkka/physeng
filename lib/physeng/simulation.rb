@@ -26,7 +26,7 @@ class Physeng
           p.move!
           rects << [screenx, screeny, 1, 1]
         end
-        @screen.update_rects *dirty
+        @screen.update_rect 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT
         SDL::delay time_to_next_update
         @next_update += UPDATE_INTERVAL
       end
