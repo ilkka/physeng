@@ -11,6 +11,7 @@ class Physeng
           #raise Trollop::HelpNeeded if arguments.empty?
           o
         end
+        0
       end
     end
   end
