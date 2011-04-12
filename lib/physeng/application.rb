@@ -6,6 +6,7 @@ class Physeng
     class << self
       def run!(*arguments)
         p = Trollop::Parser.new do
+          opt :gravity, 'Use gravity', :default => true
         end
         @opts = Trollop::with_standard_exception_handling p do
           o = p.parse arguments
@@ -13,7 +14,7 @@ class Physeng
           o
         end
         Rubygame::init
-        return Physeng::Simulation.new.run
+        return Physeng::Simulation.new.run @opts
       end
     end
   end
