@@ -58,7 +58,7 @@ class Physeng
       Particle.new(@rng.rand(-1.0..1.0), @rng.rand(-1.0..1.0),         # x, y
                    @rng.rand(-0.8..0.8), @rng.rand(-0.8..0.8),         # xvel, yvel
                    3.times.inject([]) {|l,i| l << @rng.rand(0..255)},  # [r, g, b]
-                   @rng.rand(0.0..1.0))
+                   @rng.rand(0.3..1.0))
     end
 
     def clear_screen
@@ -79,8 +79,8 @@ class Physeng
           distance = p.x * a.n_x + p.y * a.n_y + a[2]
           if distance <= 0 and p.xvel * a.n_x + p.yvel * a.n_y < 0
             # reflect velocity
-            p.xvel -= 2 * a.n_x * (p.xvel * a.n_x + p.yvel * a.n_y)
-            p.yvel -= 2 * a.n_y * (p.xvel * a.n_x + p.yvel * a.n_y)
+            p.xvel -= (1 + p.rest_coff) * a.n_x * (p.xvel * a.n_x + p.yvel * a.n_y)
+            p.yvel -= (1 + p.rest_coff) * a.n_y * (p.xvel * a.n_x + p.yvel * a.n_y)
           end
         end
       end
