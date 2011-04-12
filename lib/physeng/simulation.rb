@@ -6,7 +6,7 @@ class Physeng
     SCREEN_HEIGHT = 400
     UPDATE_INTERVAL = 30
     GRAVITY = 9.78
-    NUM_PARTICLES = 2
+    NUM_PARTICLES = 10
 
     require 'physeng/simulation/particle'
 
