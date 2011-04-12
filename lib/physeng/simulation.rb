@@ -19,14 +19,8 @@ class Physeng
       @screen = SDL::set_video_mode(SCREEN_WIDTH, SCREEN_HEIGHT, 8, SDL::SWSURFACE)
       @next_update = SDL::get_ticks + UPDATE_INTERVAL
       while @next_update < 10000
-        @screen.fill_rect 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, @screen.map_rgb(0, 0, 0)
-        dirty = @particles.inject([]) do |rects,p|
-          screenx = p.x * SCREEN_WIDTH
-          screeny = p.y * SCREEN_HEIGHT
-          @screen.put_pixel(screenx, screeny, @screen.map_rgb(0, 255, 0))
-          p.move!
-          rects << [screenx, screeny, 1, 1]
-        end
+        clear_screen
+        dirty = paint @particles
         @screen.update_rect 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT
         SDL::delay time_to_next_update
         @next_update += UPDATE_INTERVAL
@@ -43,6 +37,20 @@ class Physeng
         0
       else
         @next_update - now
+      end
+    end
+
+    def clear_screen
+      @screen.fill_rect 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, @screen.map_rgb(0, 0, 0)
+    end
+
+    def paint(paintables)
+      paintables.inject([]) do |rects,p|
+        screenx = p.x * SCREEN_WIDTH
+        screeny = p.y * SCREEN_HEIGHT
+        @screen.put_pixel(screenx, screeny, @screen.map_rgb(0, 255, 0))
+        p.move!
+        rects << [screenx, screeny, 1, 1]
       end
     end
   end
