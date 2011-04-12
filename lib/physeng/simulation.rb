@@ -14,6 +14,11 @@ class Physeng
       @particles = (1..10).inject([]) do |particles,num|
         particles << random_particle
       end
+      # normal vectors for our bounding planes (3rd component is
+      # distance to origin, meaning center of world)
+      @planes = [
+        [1.0, 0.0, 1.0], [0.0, -1.0, 1.0], [-1.0, 0.0, 1.0], [0.0, 1.0, 1.0]
+      ]
     end
 
     def run
@@ -62,29 +67,12 @@ class Physeng
 
     def collide(particles)
       particles.each do |p|
-        # collide from screen edges
-        if p.x <= -1.0
-          p.x = -1.0
-          if p.xvel < 0
-            p.xvel = -p.xvel
-          end
-        end
-        if p.x >= 1.0
-          p.x = 1.0
-          if p.xvel > 0
-            p.xvel = -p.xvel
-          end
-        end
-        if p.y <= -1.0
-          p.y = -1.0
-          if p.yvel < 0
-            p.yvel = -p.yvel
-          end
-        end
-        if p.y >= 1.0
-          p.y = 1.0
-          if p.yvel > 0
-            p.yvel = -p.yvel
+        # collide from bounding planes
+        @planes.each do |a|
+          distance = p.x * a[0] + p.y * a[1] + a[2]
+          if distance < 0
+            p.xvel = 0
+            p.yvel = 0
           end
         end
       end
