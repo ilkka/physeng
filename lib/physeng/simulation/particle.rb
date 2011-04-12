@@ -21,6 +21,16 @@ class Physeng
         @yvel += Physeng::Simulation::GRAVITY * (time_elapsed / 1000.0)
         @x += @xvel * (time_elapsed / 1000.0)
         @y += @yvel * (time_elapsed / 1000.0)
+        if @x < -1.0
+          @x = -1.0
+        elsif @x > 1.0
+          @x = 1.0
+        end
+        if @y < -1.0
+          @y = -1.0
+        elsif @y > 1.0
+          @y = 1.0
+        end
       end
     end
   end
