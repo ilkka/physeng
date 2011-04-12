@@ -30,6 +30,7 @@ class Physeng
       @screen = SDL::set_video_mode(SCREEN_WIDTH, SCREEN_HEIGHT, 8, SDL::SWSURFACE)
       @next_update = SDL::get_ticks + UPDATE_INTERVAL
       while @next_update < 10000
+        @last_update = SDL::get_ticks
         clear_screen
         dirty = paint @particles
         collide @particles
@@ -50,11 +51,10 @@ class Physeng
     end
 
     def time_to_next_update
-      now = SDL::get_ticks
-      if @next_update <= now
+      if @next_update <= @last_update
         0
       else
-        @next_update - now
+        @next_update - @last_update
       end
     end
 
