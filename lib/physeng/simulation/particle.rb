@@ -21,7 +21,9 @@ class Physeng
       end
 
       def move!(time_elapsed)
-        @yvel += Physeng::Simulation::GRAVITY * (time_elapsed / 1000.0)
+        if Physeng::Application.opts[:gravity]
+          @yvel += Physeng::Simulation::GRAVITY * (time_elapsed / 1000.0)
+        end
         @x += @xvel * (time_elapsed / 1000.0)
         @y += @yvel * (time_elapsed / 1000.0)
       end
