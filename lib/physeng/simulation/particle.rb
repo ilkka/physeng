@@ -17,7 +17,7 @@ class Physeng
       def paint(screen)
         screenx = (@x + 1.0)/2.0 * screen.w
         screeny = (@y + 1.0)/2.0 * screen.h
-        screen.draw_filled_circle screenx, screeny, @radius, screen.map_rgb(*@color)
+        screen.draw_circle [screenx, screeny], @radius, @color
       end
 
       def move!(time_elapsed)

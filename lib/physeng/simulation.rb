@@ -1,4 +1,4 @@
-require 'sdl'
+require 'rubygame'
 
 class Physeng
   class Simulation
@@ -12,7 +12,6 @@ class Physeng
     Plane = Struct.new :n_x, :n_y, :dist
 
     def initialize
-      SDL::init(SDL::INIT_EVERYTHING)
       @rng = Random.new(Time.now.to_i)
       @particles = (1..10).inject([]) do |particles,num|
         particles << random_particle
@@ -28,26 +27,25 @@ class Physeng
     end
 
     def run
-      @screen = SDL::set_video_mode(SCREEN_WIDTH, SCREEN_HEIGHT, 8, SDL::SWSURFACE)
-      while SDL::get_ticks < 10000
+      @screen = Rubygame::Screen.new [SCREEN_WIDTH, SCREEN_HEIGHT], 0, [Rubygame::HWSURFACE, Rubygame::DOUBLEBUF]
+      while Rubygame::Clock.runtime < 10000
         elapsed = wait_till_next_frame
         clear_screen
         paint @particles, elapsed
         collide @particles
         @screen.flip
       end
-      SDL::quit
       return 0
     end
 
     private
 
     def wait_till_next_frame
-      currtime = SDL::get_ticks
-      elapsed = currtime - (@prevtime ||= SDL::get_ticks)
+      currtime = Rubygame::Clock.runtime
+      elapsed = currtime - (@prevtime ||= Rubygame::Clock.runtime)
       if elapsed < UPDATE_INTERVAL
-        SDL::delay UPDATE_INTERVAL - elapsed
-        currtime = SDL::get_ticks
+        Rubygame::Clock.wait UPDATE_INTERVAL - elapsed
+        currtime = Rubygame::Clock.runtime
         elapsed = currtime - @prevtime
       end
       @prevtime = currtime
@@ -63,7 +61,7 @@ class Physeng
     end
 
     def clear_screen
-      @screen.fill_rect 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, @screen.map_rgb(0, 0, 0)
+      @screen.fill [0, 0, 0]
     end
 
     def paint(paintables, time_elapsed)
