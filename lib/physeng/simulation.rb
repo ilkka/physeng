@@ -21,7 +21,7 @@ class Physeng
       while @next_update < 10000
         clear_screen
         dirty = paint @particles
-        @screen.update_rect 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT
+        @screen.flip
         SDL::delay time_to_next_update
         @next_update += UPDATE_INTERVAL
       end
