@@ -1,10 +1,9 @@
 class Physeng
   class Simulation
     class Particle
-      attr_reader :pos, :vel
-      def initialize(pos, vel)
-        @pos = pos
-        @vel = vel
+      attr_reader :x, :y, :xvel, :yvel
+      def initialize(x, y, xvel, yvel)
+        (@x, @y, @xvel, @yvel) = (x, y, xvel, yvel)
       end
     end
   end
