@@ -27,7 +27,7 @@ class Physeng
       ]
     end
 
-    def run(opts)
+    def run
       @screen = Rubygame::Screen.new [SCREEN_WIDTH, SCREEN_HEIGHT], 0, [Rubygame::HWSURFACE, Rubygame::DOUBLEBUF]
       while Rubygame::Clock.runtime < 10000
         elapsed = wait_till_next_frame

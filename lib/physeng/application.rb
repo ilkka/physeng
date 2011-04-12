@@ -16,7 +16,7 @@ class Physeng
           o
         end
         Rubygame::init
-        return Physeng::Simulation.new.run @opts
+        return Physeng::Simulation.new.run
       end
     end
   end
