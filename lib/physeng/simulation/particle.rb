@@ -1,14 +1,14 @@
 class Physeng
   class Simulation
     class Particle
-      attr_reader :x, :y, :xvel, :yvel
+      attr_reader :x, :y, :xvel, :yvel, :color
 
-      def initialize(x, y, xvel, yvel)
+      def initialize(x, y, xvel, yvel, color)
         @x = x
         @y = y
         @xvel = xvel
         @yvel = yvel
-        @color = [0, 255, 0]
+        @color = color
       end
 
       def paint(screen)

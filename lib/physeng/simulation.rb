@@ -10,8 +10,9 @@ class Physeng
 
     def initialize
       SDL::init(SDL::INIT_EVERYTHING)
+      @rng = Random.new(Time.now.to_i)
       @particles = (1..10).inject([]) do |particles,num|
-        particles << Physeng::Simulation::Particle.new(rand, rand, (rand - 0.5)/10, (rand - 0.5)/10)
+        particles << random_particle
       end
     end
 
@@ -30,6 +31,12 @@ class Physeng
     end
 
     private
+
+    def random_particle
+      Particle.new(@rng.rand(-1.0..1.0), @rng.rand(-1.0..1.0),         # x, y
+                   @rng.rand(-0.03..0.03), @rng.rand(-0.03..0.03),         # xvel, yvel
+                   3.times.inject([]) {|l,i| l << @rng.rand(0..255)})  # [r, g, b]
+    end
 
     def time_to_next_update
       now = SDL::get_ticks
