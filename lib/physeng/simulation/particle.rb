@@ -1,7 +1,7 @@
 class Physeng
   class Simulation
     class Particle
-      attr_reader :x, :y, :xvel, :yvel, :color
+      attr_accessor :x, :y, :xvel, :yvel, :color
 
       def initialize(x, y, xvel, yvel, color)
         @x = x
