@@ -19,6 +19,7 @@ class Physeng
       @screen = SDL::set_video_mode(SCREEN_WIDTH, SCREEN_HEIGHT, 8, SDL::SWSURFACE)
       @next_update = SDL::get_ticks + UPDATE_INTERVAL
       while @next_update < 10000
+        @screen.fill_rect 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, @screen.map_rgb(0, 0, 0)
         dirty = @particles.inject([]) do |rects,p|
           screenx = p.x * SCREEN_WIDTH
           screeny = p.y * SCREEN_HEIGHT
