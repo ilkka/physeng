@@ -18,9 +18,9 @@ class Physeng
         return [screenx-2, screeny-2, 4, 4]
       end
 
-      def move!
-        @x += @xvel
-        @y += @yvel
+      def move!(time_elapsed)
+        @x += @xvel * (time_elapsed / 1000.0)
+        @y += @yvel * (time_elapsed / 1000.0)
       end
     end
   end

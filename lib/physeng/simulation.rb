@@ -28,15 +28,12 @@ class Physeng
 
     def run
       @screen = SDL::set_video_mode(SCREEN_WIDTH, SCREEN_HEIGHT, 8, SDL::SWSURFACE)
-      @next_update = SDL::get_ticks + UPDATE_INTERVAL
-      while @next_update < 10000
-        @last_update = SDL::get_ticks
+      while SDL::get_ticks < 10000
+        elapsed = wait_till_next_frame
         clear_screen
-        dirty = paint @particles
+        dirty = paint @particles, elapsed
         collide @particles
         @screen.flip
-        SDL::delay time_to_next_update
-        @next_update += UPDATE_INTERVAL
       end
       SDL::quit
       return 0
@@ -44,28 +41,32 @@ class Physeng
 
     private
 
+    def wait_till_next_frame
+      currtime = SDL::get_ticks
+      elapsed = currtime - (@prevtime ||= SDL::get_ticks)
+      if elapsed < UPDATE_INTERVAL
+        SDL::delay UPDATE_INTERVAL - elapsed
+        currtime = SDL::get_ticks
+        elapsed = currtime - @prevtime
+      end
+      @prevtime = currtime
+      return elapsed
+    end
+
     def random_particle
       Particle.new(@rng.rand(-1.0..1.0), @rng.rand(-1.0..1.0),         # x, y
                    @rng.rand(-0.03..0.03), @rng.rand(-0.03..0.03),         # xvel, yvel
                    3.times.inject([]) {|l,i| l << @rng.rand(0..255)})  # [r, g, b]
     end
 
-    def time_to_next_update
-      if @next_update <= @last_update
-        0
-      else
-        @next_update - @last_update
-      end
-    end
-
     def clear_screen
       @screen.fill_rect 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, @screen.map_rgb(0, 0, 0)
     end
 
-    def paint(paintables)
+    def paint(paintables, time_elapsed)
       paintables.inject([]) do |rects,p|
         dirty = p.paint @screen
-        p.move!
+        p.move! time_elapsed
         rects << dirty
       end
     end
