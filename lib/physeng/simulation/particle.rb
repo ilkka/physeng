@@ -14,7 +14,7 @@ class Physeng
       def paint(screen)
         screenx = (@x + 1.0)/2.0 * screen.w
         screeny = (@y + 1.0)/2.0 * screen.h
-        screen.draw_filled_circle screenx, screeny, 2, screen.map_rgb(*@color)
+        screen.draw_filled_circle screenx, screeny, 5, screen.map_rgb(*@color)
         return [screenx-2, screeny-2, 4, 4]
       end
 
