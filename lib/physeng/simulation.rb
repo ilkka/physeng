@@ -23,8 +23,8 @@ class Physeng
           screenx = p.x * SCREEN_WIDTH
           screeny = p.y * SCREEN_HEIGHT
           @screen.put_pixel(screenx, screeny, @screen.map_rgb(0, 255, 0))
-          rects << [screenx, screeny, 1, 1]
           p.move!
+          rects << [screenx, screeny, 1, 1]
         end
         @screen.update_rects *dirty
         SDL::delay time_to_next_update
