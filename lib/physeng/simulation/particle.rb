@@ -1,15 +1,16 @@
 class Physeng
   class Simulation
     class Particle
-      attr_accessor :x, :y, :xvel, :yvel, :color, :rest_coff
+      attr_accessor :x, :y, :xvel, :yvel, :color, :rest_coff, :mass
 
-      def initialize(x, y, xvel, yvel, color, rc)
+      def initialize(x, y, xvel, yvel, color, rc, mass)
         @x = x
         @y = y
         @xvel = xvel
         @yvel = yvel
         @color = color
         @rest_coff = rc
+        @mass = mass
       end
 
       def paint(screen)
