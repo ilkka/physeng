@@ -1,0 +1,3 @@
+rvm --install ruby-1.9.2-p180
+rvm use --create --install ruby-1.9.2-p180@physeng
+bundle install
