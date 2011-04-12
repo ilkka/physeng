@@ -11,7 +11,7 @@ class Physeng
     def initialize
       SDL::init(SDL::INIT_EVERYTHING)
       @particles = (1..10).inject([]) do |particles,num|
-        particles << Physeng::Simulation::Particle.new(rand, rand, rand, rand)
+        particles << Physeng::Simulation::Particle.new(rand, rand, (rand - 0.5)/10, (rand - 0.5)/10)
       end
     end
 
@@ -24,6 +24,7 @@ class Physeng
           screeny = p.y * SCREEN_HEIGHT
           @screen.put_pixel(screenx, screeny, @screen.map_rgb(0, 255, 0))
           rects << [screenx, screeny, 1, 1]
+          p.move!
         end
         @screen.update_rects *dirty
         SDL::delay time_to_next_update
