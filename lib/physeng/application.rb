@@ -1,4 +1,5 @@
 require 'trollop'
+require 'rubygame'
 
 class Physeng
   class Application
@@ -11,6 +12,7 @@ class Physeng
           #raise Trollop::HelpNeeded if arguments.empty?
           o
         end
+        Rubygame::init
         return Physeng::Simulation.new.run
       end
     end
