@@ -76,26 +76,26 @@ class Physeng
     def collide(particles)
       particles.each do |p|
         # collide from other particles
-        particles.reject {|o| o == p}.each do |o|
-          distance = Math.sqrt((o.x - p.x)**2 + (o.y - p.y)**2)
-          if distance < p.radius + o.radius
-            # calculate relative velocity
-            xrel = p.xvel - o.xvel
-            yrel = p.yvel - o.yvel
-            # calculate collision normal
-            xnorm = (o.x - p.x) / distance
-            ynorm = (o.y - p.y) / distance
-            # dot product of relative vel and normal
-            vrel_dot_norm = xrel * xnorm + yrel * ynorm
-            # impulse
-            ximpulse = (1 + p.rest_coff) * xnorm * vrel_dot_norm
-            yimpulse = (1 + p.rest_coff) * ynorm * vrel_dot_norm
-            p.xvel = -ximpulse * (o.mass / (p.mass + o.mass))
-            p.yvel = -yimpulse * (o.mass / (p.mass + o.mass))
-            o.xvel = -ximpulse * (p.mass / (p.mass + o.mass))
-            o.yvel = yimpulse * (p.mass / (p.mass + o.mass))
-          end
-        end
+        #particles.reject {|o| o == p}.each do |o|
+          #distance = Math.sqrt((o.x - p.x)**2 + (o.y - p.y)**2)
+          #if distance < p.radius + o.radius
+            ## calculate relative velocity
+            #xrel = p.xvel - o.xvel
+            #yrel = p.yvel - o.yvel
+            ## calculate collision normal
+            #xnorm = (o.x - p.x) / distance
+            #ynorm = (o.y - p.y) / distance
+            ## dot product of relative vel and normal
+            #vrel_dot_norm = xrel * xnorm + yrel * ynorm
+            ## impulse
+            #ximpulse = (1 + p.rest_coff) * xnorm * vrel_dot_norm
+            #yimpulse = (1 + p.rest_coff) * ynorm * vrel_dot_norm
+            #p.xvel = -ximpulse * (o.mass / (p.mass + o.mass))
+            #p.yvel = -yimpulse * (o.mass / (p.mass + o.mass))
+            #o.xvel = -ximpulse * (p.mass / (p.mass + o.mass))
+            #o.yvel = yimpulse * (p.mass / (p.mass + o.mass))
+          #end
+        #end
         # collide from bounding planes
         @planes.each do |a|
           distance = p.x * a.n_x + p.y * a.n_y + a[2]
