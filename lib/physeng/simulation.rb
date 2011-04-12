@@ -46,11 +46,9 @@ class Physeng
 
     def paint(paintables)
       paintables.inject([]) do |rects,p|
-        screenx = p.x * SCREEN_WIDTH
-        screeny = p.y * SCREEN_HEIGHT
-        @screen.put_pixel(screenx, screeny, @screen.map_rgb(0, 255, 0))
+        dirty = p.paint @screen
         p.move!
-        rects << [screenx, screeny, 1, 1]
+        rects << dirty
       end
     end
   end
