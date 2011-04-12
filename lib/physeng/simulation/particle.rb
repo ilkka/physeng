@@ -21,31 +21,6 @@ class Physeng
       def move!
         @x += @xvel
         @y += @yvel
-        # collide from screen edges
-        if @x <= -1.0
-          @x = -1.0
-          if @xvel < 0
-            @xvel = -@xvel
-          end
-        end
-        if @x >= 1.0
-          @x = 1.0
-          if @xvel > 0
-            @xvel = -@xvel
-          end
-        end
-        if @y <= -1.0
-          @y = -1.0
-          if @yvel < 0
-            @yvel = -@yvel
-          end
-        end
-        if @y >= 1.0
-          @y = 1.0
-          if @yvel > 0
-            @yvel = -@yvel
-          end
-        end
       end
     end
   end
