@@ -8,6 +8,8 @@ class Physeng
     SCREEN_HEIGHT = 400
     UPDATE_INTERVAL = 30
 
+    Plane = Struct.new :n_x, :n_y, :dist
+
     def initialize
       SDL::init(SDL::INIT_EVERYTHING)
       @rng = Random.new(Time.now.to_i)
@@ -17,7 +19,10 @@ class Physeng
       # normal vectors for our bounding planes (3rd component is
       # distance to origin, meaning center of world)
       @planes = [
-        [1.0, 0.0, 1.0], [0.0, -1.0, 1.0], [-1.0, 0.0, 1.0], [0.0, 1.0, 1.0]
+        Plane.new(1.0, 0.0, 1.0),
+        Plane.new(0.0, -1.0, 1.0),
+        Plane.new(-1.0, 0.0, 1.0),
+        Plane.new(0.0, 1.0, 1.0)
       ]
     end
 
@@ -69,10 +74,11 @@ class Physeng
       particles.each do |p|
         # collide from bounding planes
         @planes.each do |a|
-          distance = p.x * a[0] + p.y * a[1] + a[2]
-          if distance < 0
-            p.xvel = 0
-            p.yvel = 0
+          distance = p.x * a.n_x + p.y * a.n_y + a[2]
+          if distance < 0 and p.xvel * a.n_x + p.yvel * a.n_y < 0
+            # reflect velocity
+            p.xvel -= 2 * a.n_x * (p.xvel * a.n_x + p.yvel * a.n_y)
+            p.yvel -= 2 * a.n_y * (p.xvel * a.n_x + p.yvel * a.n_y)
           end
         end
       end
