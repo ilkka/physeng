@@ -3,7 +3,7 @@ class Physeng
     class Particle
       attr_accessor :x, :y, :xvel, :yvel, :color, :rest_coff, :mass, :radius
 
-      def initialize(x, y, xvel, yvel, color, rc, mass)
+      def initialize(x, y, xvel, yvel, color, rc, mass, radius)
         @x = x
         @y = y
         @xvel = xvel
@@ -11,7 +11,7 @@ class Physeng
         @color = color
         @rest_coff = rc
         @mass = mass
-        @radius = @mass * 3
+        @radius = radius
       end
 
       def paint(screen)

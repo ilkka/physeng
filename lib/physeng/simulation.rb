@@ -6,6 +6,7 @@ class Physeng
     SCREEN_HEIGHT = 400
     UPDATE_INTERVAL = 30
     GRAVITY = 9.78
+    NUM_PARTICLES = 2
 
     require 'physeng/simulation/particle'
 
@@ -13,7 +14,7 @@ class Physeng
 
     def initialize
       @rng = Random.new(Time.now.to_i)
-      @particles = (1..10).inject([]) do |particles,num|
+      @particles = (1..NUM_PARTICLES).inject([]) do |particles,num|
         particles << random_particle
       end
       # normal vectors for our bounding planes (3rd component is
@@ -57,7 +58,8 @@ class Physeng
                    @rng.rand(-0.8..0.8), @rng.rand(-0.8..0.8),         # xvel, yvel
                    3.times.inject([]) {|l,i| l << @rng.rand(0..255)},  # [r, g, b]
                    @rng.rand(0.3..1.0),
-                   @rng.rand(1.0..10.0))
+                   @rng.rand(1.0..10.0),
+                   @rng.rand(0.05..0.2))
     end
 
     def clear_screen
@@ -74,14 +76,26 @@ class Physeng
     def collide(particles)
       particles.each do |p|
         # collide from other particles
-        #particles.reject {|o| o == p}.each do |o|
-          #distance = Math.sqrt((o.x - p.x)**2 + (o.y - p.y)**2)
-          #if distance < p.radius + o.radius
-            #xrel = p.xvel - o.xvel
-            #yrel = p.yvel - o.yvel
-            #ximpulse = (1 + p.rest_coff) * 
-          #end
-        #end
+        particles.reject {|o| o == p}.each do |o|
+          distance = Math.sqrt((o.x - p.x)**2 + (o.y - p.y)**2)
+          if distance < p.radius + o.radius
+            # calculate relative velocity
+            xrel = p.xvel - o.xvel
+            yrel = p.yvel - o.yvel
+            # calculate collision normal
+            xnorm = (o.x - p.x) / distance
+            ynorm = (o.y - p.y) / distance
+            # dot product of relative vel and normal
+            vrel_dot_norm = xrel * xnorm + yrel * ynorm
+            # impulse
+            ximpulse = (1 + p.rest_coff) * xnorm * vrel_dot_norm
+            yimpulse = (1 + p.rest_coff) * ynorm * vrel_dot_norm
+            p.xvel = -ximpulse * (o.mass / (p.mass + o.mass))
+            p.yvel = -yimpulse * (o.mass / (p.mass + o.mass))
+            o.xvel = -ximpulse * (p.mass / (p.mass + o.mass))
+            o.yvel = yimpulse * (p.mass / (p.mass + o.mass))
+          end
+        end
         # collide from bounding planes
         @planes.each do |a|
           distance = p.x * a.n_x + p.y * a.n_y + a[2]
