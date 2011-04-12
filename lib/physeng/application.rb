@@ -4,6 +4,8 @@ require 'rubygame'
 class Physeng
   class Application
     class << self
+      attr_reader :opts
+
       def run!(*arguments)
         p = Trollop::Parser.new do
           opt :gravity, 'Use gravity', :default => true
