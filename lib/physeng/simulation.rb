@@ -2,11 +2,12 @@ require 'sdl'
 
 class Physeng
   class Simulation
-    require 'physeng/simulation/particle'
-
     SCREEN_WIDTH = 400
     SCREEN_HEIGHT = 400
     UPDATE_INTERVAL = 30
+    GRAVITY = 9.78
+
+    require 'physeng/simulation/particle'
 
     Plane = Struct.new :n_x, :n_y, :dist
 
