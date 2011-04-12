@@ -75,6 +75,15 @@ class Physeng
 
     def collide(particles)
       particles.each do |p|
+        # collide from other particles
+        #particles.reject {|o| o == p}.each do |o|
+          #distance = Math.sqrt((o.x - p.x)**2 + (o.y - p.y)**2)
+          #if distance < p.radius + o.radius
+            #xrel = p.xvel - o.xvel
+            #yrel = p.yvel - o.yvel
+            #ximpulse = (1 + p.rest_coff) * 
+          #end
+        #end
         # collide from bounding planes
         @planes.each do |a|
           distance = p.x * a.n_x + p.y * a.n_y + a[2]
