@@ -59,7 +59,8 @@ class Physeng
                    @rng.rand(-0.8..0.8), @rng.rand(-0.8..0.8),         # xvel, yvel
                    3.times.inject([]) {|l,i| l << @rng.rand(0..255)},  # [r, g, b]
                    @rng.rand(0.3..1.0),
-                   @rng.rand(1.0..10.0))
+                   @rng.rand(1.0..10.0),
+                   @rng.rand(0.05..0.15))
     end
 
     def clear_screen
