@@ -4,7 +4,7 @@ class Physeng
   class Simulation
     UPDATE_INTERVAL = 30
     GRAVITY = 9.78
-    GRAV_CONSTANT = 6.674 * 10**-11
+    GRAV_CONSTANT = 6.674e-11
 
     require 'physeng/simulation/particle'
 
