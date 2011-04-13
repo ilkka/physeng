@@ -4,7 +4,6 @@ class Physeng
   class Simulation
     UPDATE_INTERVAL = 30
     GRAVITY = 9.78
-    NUM_PARTICLES = 10
 
     require 'physeng/simulation/particle'
 
@@ -13,8 +12,9 @@ class Physeng
     def initialize
       SDL::init(SDL::INIT_EVERYTHING)
       SDL::TTF.init
+      @opts = Physeng::Application.opts
       @rng = Random.new(Time.now.to_i)
-      @particles = (1..NUM_PARTICLES).inject([]) do |particles,num|
+      @particles = (1..@opts[:particles]).inject([]) do |particles,num|
         particles << random_particle
       end
       # normal vectors for our bounding planes (3rd component is
@@ -28,15 +28,14 @@ class Physeng
     end
 
     def run
-      @screensize = Physeng::Application.opts[:window_size]
-      @screen = SDL::set_video_mode(@screensize[0], @screensize[1], 8, SDL::SWSURFACE)
+      @screen = SDL::set_video_mode(@opts[:window_size][0], @opts[:window_size][1], 8, SDL::SWSURFACE)
       while true
         elapsed = wait_till_next_frame
         clear_screen
         paint @particles, elapsed
         collide @particles
         @screen.flip
-        break if Physeng::Application.opts[:duration] > 0 && SDL::get_ticks > Physeng::Application.opts[:duration] * 1000
+        break if @opts[:duration] > 0 && SDL::get_ticks > @opts[:duration] * 1000
       end
       SDL::quit
       return 0
@@ -66,7 +65,7 @@ class Physeng
     end
 
     def clear_screen
-      @screen.fill_rect 0, 0, @screensize[0], @screensize[1], @screen.map_rgb(0, 0, 0)
+      @screen.fill_rect 0, 0, @opts[:window_size][0], @opts[:window_size][1], @screen.map_rgb(0, 0, 0)
     end
 
     def paint(paintables, time_elapsed)
