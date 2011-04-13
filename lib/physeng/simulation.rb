@@ -13,6 +13,7 @@ class Physeng
 
     def initialize
       SDL::init(SDL::INIT_EVERYTHING)
+      SDL::TTF.init
       @rng = Random.new(Time.now.to_i)
       @particles = (1..10).inject([]) do |particles,num|
         particles << random_particle
