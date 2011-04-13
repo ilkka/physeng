@@ -31,12 +31,13 @@ class Physeng
 
     def run
       @screen = SDL::set_video_mode(SCREEN_WIDTH, SCREEN_HEIGHT, 8, SDL::SWSURFACE)
-      while SDL::get_ticks < 10000
+      while true
         elapsed = wait_till_next_frame
         clear_screen
         paint @particles, elapsed
         collide @particles
         @screen.flip
+        break if Physeng::Application.opts[:duration] > 0 && SDL::get_ticks > Physeng::Application.opts[:duration] * 1000
       end
       SDL::quit
       return 0
