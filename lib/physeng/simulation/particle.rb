@@ -2,8 +2,12 @@ class Physeng
   class Simulation
     class Particle
       attr_accessor :x, :y, :xvel, :yvel, :color, :rest_coff, :mass, :radius
+      attr_reader :id
 
       def initialize(x, y, xvel, yvel, color, rc, mass, radius)
+        @@counter ||= 1
+        @id = @@counter
+        @@counter += 1
         @x = x
         @y = y
         @xvel = xvel
