@@ -2,8 +2,6 @@ require 'sdl'
 
 class Physeng
   class Simulation
-    SCREEN_WIDTH = 400
-    SCREEN_HEIGHT = 400
     UPDATE_INTERVAL = 30
     GRAVITY = 9.78
     NUM_PARTICLES = 10
@@ -30,7 +28,8 @@ class Physeng
     end
 
     def run
-      @screen = SDL::set_video_mode(SCREEN_WIDTH, SCREEN_HEIGHT, 8, SDL::SWSURFACE)
+      @screensize = Physeng::Application.opts[:window_size]
+      @screen = SDL::set_video_mode(@screensize[0], @screensize[1], 8, SDL::SWSURFACE)
       while true
         elapsed = wait_till_next_frame
         clear_screen
@@ -67,7 +66,7 @@ class Physeng
     end
 
     def clear_screen
-      @screen.fill_rect 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, @screen.map_rgb(0, 0, 0)
+      @screen.fill_rect 0, 0, @screensize[0], @screensize[1], @screen.map_rgb(0, 0, 0)
     end
 
     def paint(paintables, time_elapsed)

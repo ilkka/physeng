@@ -11,10 +11,16 @@ class Physeng
           opt :gravity, "Toggle gravity", :default => false
           opt :duration, "Simulation duration in seconds (0 for infinite)", :default => 10
           opt :center, "Toggle center gravity", :default => false
+          opt :window_size, "Window size (WIDTHxHEIGHT)", :default => "400x400"
         end
         @opts = Trollop::with_standard_exception_handling p do
           o = p.parse arguments
-          #raise Trollop::HelpNeeded if arguments.empty?
+          # validate window size argument
+          size_components = o[:window_size].split(/x/, 2)
+          if size_components.length != 2 or size_components.any? {|c| c.index(/[^0-9]/) != nil}
+            raise Trollop::CommandlineError, "invalid window size #{o[:window_size]}"
+          end
+          o[:window_size] = [size_components[0].to_i, size_components[1].to_i]
           o
         end
         # check that SDL has been built with SGE
