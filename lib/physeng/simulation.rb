@@ -88,12 +88,12 @@ class Physeng
         # collide from bounding planes
         @planes.each do |a|
           distance = p.x * a.n_x + p.y * a.n_y + a[2]
-          if distance < 0 and p.xvel * a.n_x + p.yvel * a.n_y < 0
+          if distance < p.radius and p.xvel * a.n_x + p.yvel * a.n_y < 0
             # reflect velocity
             p.xvel -= (1 + p.rest_coff) * a.n_x * (p.xvel * a.n_x + p.yvel * a.n_y)
             p.yvel -= (1 + p.rest_coff) * a.n_y * (p.xvel * a.n_x + p.yvel * a.n_y)
-            p.x += -distance * a.n_x
-            p.y += -distance * a.n_y
+            p.x += (-distance + p.radius) * a.n_x
+            p.y += (-distance + p.radius) * a.n_y
           end
         end
       end
