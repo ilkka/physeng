@@ -80,12 +80,17 @@ class Physeng
       particles.each do |p|
         # collide from other particles
         particles.reject {|o| o == p}.each do |o|
-          distance = Math.sqrt((o.x - p.x)**2 + (o.y - p.y)**2)
-          if distance < p.radius + o.radius
+          vec = [o.x - p.x, o.y - p.y]
+          distance = Math.sqrt(vec[0]**2 + vec[1]**2)
+          nor = [vec[0]/distance, vec[1]/distance]
+          overlap = distance - (p.radius + o.radius)
+          if overlap < 0
             p.xvel = 0
             p.yvel = 0
             o.xvel = 0
             o.yvel = 0
+            p.x += (overlap) * nor[0]
+            p.y += (overlap) * nor[1]
           end
         end
         # collide from bounding planes
