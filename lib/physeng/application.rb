@@ -8,7 +8,7 @@ class Physeng
 
       def run!(*arguments)
         p = Trollop::Parser.new do
-          opt :gravity, "Toggle gravity", :default => true
+          opt :gravity, "Toggle gravity", :default => false
           opt :duration, "Simulation duration in seconds (0 for infinite)", :default => 10
         end
         @opts = Trollop::with_standard_exception_handling p do
