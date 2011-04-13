@@ -84,13 +84,27 @@ class Physeng
           distance = Math.sqrt(vec[0]**2 + vec[1]**2)
           nor = [vec[0]/distance, vec[1]/distance]
           overlap = distance - (p.radius + o.radius)
+          # collision?
           if overlap < 0
-            p.xvel = 0
-            p.yvel = 0
-            o.xvel = 0
-            o.yvel = 0
+            # move to end overlap
             p.x += (overlap) * nor[0]
             p.y += (overlap) * nor[1]
+            # relative velocity
+            vrel = [
+              p.xvel - o.xvel,
+              p.yvel - o.yvel
+            ]
+            # use average of the coefficients of restitution
+            rcoff = (p.rest_coff + o.rest_coff) / 2.0
+            impulse = [
+              ((1 + rcoff) * nor[0] * (vrel[0] * nor[0] + vrel[1] * nor[1])) / (1.0/p.mass + 1.0/o.mass),
+              ((1 + rcoff) * nor[1] * (vrel[0] * nor[0] + vrel[1] * nor[1])) / (1.0/p.mass + 1.0/o.mass)
+            ]
+            # change velocities
+            p.xvel -= impulse[0] * 1.0/p.mass
+            p.yvel -= impulse[1] * 1.0/p.mass
+            o.xvel += impulse[0] * 1.0/o.mass
+            o.yvel += impulse[1] * 1.0/o.mass
           end
         end
         # collide from bounding planes
