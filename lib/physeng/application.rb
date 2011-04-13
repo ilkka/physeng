@@ -8,11 +8,13 @@ class Physeng
 
       def run!(*arguments)
         p = Trollop::Parser.new do
-          opt :gravity, "Toggle gravity", :default => false
+          opt :gravity, "World gravity", :default => false
           opt :duration, "Simulation duration in seconds (0 for infinite)", :default => 10
-          opt :center, "Toggle center gravity", :default => false
+          opt :center, "Center gravity", :default => false
           opt :window_size, "Window size (WIDTHxHEIGHT)", :default => "400x400"
           opt :particles, "Number of particles", :default => 10
+          opt :mutual, "Mutual gravity", :default => false
+          opt :edges, "Screen edges", :default => true
         end
         @opts = Trollop::with_standard_exception_handling p do
           o = p.parse arguments
