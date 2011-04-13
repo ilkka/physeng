@@ -135,15 +135,17 @@ class Physeng
           other.yvel += impulse[1] * 1.0/other.mass
         end
       end
-      # collide from bounding planes
-      @planes.each do |a|
-        distance = particle.x * a.n_x + particle.y * a.n_y + a[2]
-        if distance < particle.radius and particle.xvel * a.n_x + particle.yvel * a.n_y < 0
-          # reflect velocity
-          particle.xvel -= (1 + particle.rest_coff) * a.n_x * (particle.xvel * a.n_x + particle.yvel * a.n_y)
-          particle.yvel -= (1 + particle.rest_coff) * a.n_y * (particle.xvel * a.n_x + particle.yvel * a.n_y)
-          particle.x += (particle.radius - distance) * a.n_x
-          particle.y += (particle.radius - distance) * a.n_y
+      if @opts[:edges]
+        # collide from bounding planes
+        @planes.each do |a|
+          distance = particle.x * a.n_x + particle.y * a.n_y + a[2]
+          if distance < particle.radius and particle.xvel * a.n_x + particle.yvel * a.n_y < 0
+            # reflect velocity
+            particle.xvel -= (1 + particle.rest_coff) * a.n_x * (particle.xvel * a.n_x + particle.yvel * a.n_y)
+            particle.yvel -= (1 + particle.rest_coff) * a.n_y * (particle.xvel * a.n_x + particle.yvel * a.n_y)
+            particle.x += (particle.radius - distance) * a.n_x
+            particle.y += (particle.radius - distance) * a.n_y
+          end
         end
       end
     end
