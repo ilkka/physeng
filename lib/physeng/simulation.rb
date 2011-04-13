@@ -6,6 +6,7 @@ class Physeng
     SCREEN_HEIGHT = 400
     UPDATE_INTERVAL = 30
     GRAVITY = 9.78
+    NUM_PARTICLES = 10
 
     require 'physeng/simulation/particle'
 
@@ -15,7 +16,7 @@ class Physeng
       SDL::init(SDL::INIT_EVERYTHING)
       SDL::TTF.init
       @rng = Random.new(Time.now.to_i)
-      @particles = (1..10).inject([]) do |particles,num|
+      @particles = (1..NUM_PARTICLES).inject([]) do |particles,num|
         particles << random_particle
       end
       # normal vectors for our bounding planes (3rd component is
