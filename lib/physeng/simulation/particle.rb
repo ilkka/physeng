@@ -6,6 +6,7 @@ class Physeng
 
       def initialize(x, y, xvel, yvel, color, rc, mass, radius)
         @@counter ||= 1
+        @@font ||= SDL::TTF.open File.join(File.dirname(__FILE__), '..', 'FreeSans.ttf'), 12
         @id = @@counter
         @@counter += 1
         @x = x
