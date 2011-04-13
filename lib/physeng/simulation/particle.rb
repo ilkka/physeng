@@ -20,14 +20,12 @@ class Physeng
       end
 
       def paint(screen)
-        screenx = (@x + 1.0)/2.0 * screen.w
-        screeny = (@y + 1.0)/2.0 * screen.h
+        screencoords = [(@x + 1.0)/2.0 * screen.w, (@y + 1.0)/2.0 * screen.h]
         rez = ((screen.w + screen.h) / 2.0) / 2.0
-        screen.draw_filled_circle screenx, screeny, @radius * rez, screen.map_rgb(*@color)
+        screen.draw_filled_circle(screencoords[0], screencoords[1], @radius * rez, screen.map_rgb(*@color))
         textsize = @@font.text_size(@id.to_s)
-        textx = screenx - textsize[0]/2
-        texty = screeny - textsize[1]/2
-        @@font.draw_blended_utf8(screen, @id.to_s, textx, texty, 255, 255, 255)
+        textcoords = [screencoords[0] - textsize[0]/2, screencoords[1] - textsize[1]/2]
+        @@font.draw_blended_utf8(screen, @id.to_s, textcoords[0], textcoords[1], 255, 255, 255)
       end
 
       def move!(time_elapsed)
