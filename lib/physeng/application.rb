@@ -4,8 +4,11 @@ require 'sdl'
 class Physeng
   class Application
     class << self
+      attr_reader :opts
+
       def run!(*arguments)
         p = Trollop::Parser.new do
+          opt :gravity, "Toggle gravity", :default => true
         end
         @opts = Trollop::with_standard_exception_handling p do
           o = p.parse arguments
