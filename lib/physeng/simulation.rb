@@ -32,8 +32,12 @@ class Physeng
       while true
         elapsed = wait_till_next_frame
         clear_screen
-        paint @particles, elapsed
-        collide @particles
+        @particles.each do |particle|
+          particle.paint @screen
+          particle.move! elapsed
+          apply_forces particle, elapsed
+          collide particle
+        end
         @screen.flip
         break if @opts[:duration] > 0 && SDL::get_ticks > @opts[:duration] * 1000
       end
@@ -68,54 +72,60 @@ class Physeng
       @screen.fill_rect 0, 0, @opts[:window_size][0], @opts[:window_size][1], @screen.map_rgb(0, 0, 0)
     end
 
-    def paint(paintables, time_elapsed)
-      paintables.each do |p|
-        p.paint @screen
-        p.move! time_elapsed
-      end
+    def apply_forces(particle, time_elapsed)
+      apply_gravity_down(particle, time_elapsed) if @opts[:gravity]
+      apply_gravity_to_origin(particle, time_elapsed) if @opts[:center]
     end
 
-    def collide(particles)
-      particles.each do |p|
-        # collide from other particles
-        particles.reject {|o| o == p}.each do |o|
-          vec = [o.x - p.x, o.y - p.y]
-          distance = Math.sqrt(vec[0]**2 + vec[1]**2)
-          nor = [vec[0]/distance, vec[1]/distance]
-          overlap = distance - (p.radius + o.radius)
-          # collision?
-          if overlap < 0
-            # move to end overlap
-            p.x += (overlap) * nor[0]
-            p.y += (overlap) * nor[1]
-            # relative velocity
-            vrel = [
-              p.xvel - o.xvel,
-              p.yvel - o.yvel
-            ]
-            # use average of the coefficients of restitution
-            rcoff = (p.rest_coff + o.rest_coff) / 2.0
-            impulse = [
-              ((1 + rcoff) * nor[0] * (vrel[0] * nor[0] + vrel[1] * nor[1])) / (1.0/p.mass + 1.0/o.mass),
-              ((1 + rcoff) * nor[1] * (vrel[0] * nor[0] + vrel[1] * nor[1])) / (1.0/p.mass + 1.0/o.mass)
-            ]
-            # change velocities
-            p.xvel -= impulse[0] * 1.0/p.mass
-            p.yvel -= impulse[1] * 1.0/p.mass
-            o.xvel += impulse[0] * 1.0/o.mass
-            o.yvel += impulse[1] * 1.0/o.mass
-          end
+    def apply_gravity_down(particle, time_elapsed)
+      particle.yvel += Physeng::Simulation::GRAVITY * (time_elapsed / 1000.0)
+    end
+
+    def apply_gravity_to_origin(particle, time_elapsed)
+      center_dist = Math.sqrt(particle.x**2 + particle.y**2)
+      particle.xvel += -particle.x/center_dist * Physeng::Simulation::GRAVITY * (time_elapsed / 1000.0)
+      particle.yvel += -particle.y/center_dist * Physeng::Simulation::GRAVITY * (time_elapsed / 1000.0)
+    end
+
+    def collide(particle)
+      # collide from other particles
+      @particles.reject {|o| o == particle}.each do |other|
+        vec = [other.x - particle.x, other.y - particle.y]
+        distance = Math.sqrt(vec[0]**2 + vec[1]**2)
+        nor = [vec[0]/distance, vec[1]/distance]
+        overlap = distance - (particle.radius + other.radius)
+        # collision?
+        if overlap < 0
+          # move to end overlap
+          particle.x += (overlap) * nor[0]
+          particle.y += (overlap) * nor[1]
+          # relative velocity
+          vrel = [
+            particle.xvel - other.xvel,
+            particle.yvel - other.yvel
+          ]
+          # use average of the coefficients of restitution
+          rcoff = (particle.rest_coff + other.rest_coff) / 2.0
+          impulse = [
+            ((1 + rcoff) * nor[0] * (vrel[0] * nor[0] + vrel[1] * nor[1])) / (1.0/particle.mass + 1.0/other.mass),
+            ((1 + rcoff) * nor[1] * (vrel[0] * nor[0] + vrel[1] * nor[1])) / (1.0/particle.mass + 1.0/other.mass)
+          ]
+          # change velocities
+          particle.xvel -= impulse[0] * 1.0/particle.mass
+          particle.yvel -= impulse[1] * 1.0/particle.mass
+          other.xvel += impulse[0] * 1.0/other.mass
+          other.yvel += impulse[1] * 1.0/other.mass
         end
-        # collide from bounding planes
-        @planes.each do |a|
-          distance = p.x * a.n_x + p.y * a.n_y + a[2]
-          if distance < p.radius and p.xvel * a.n_x + p.yvel * a.n_y < 0
-            # reflect velocity
-            p.xvel -= (1 + p.rest_coff) * a.n_x * (p.xvel * a.n_x + p.yvel * a.n_y)
-            p.yvel -= (1 + p.rest_coff) * a.n_y * (p.xvel * a.n_x + p.yvel * a.n_y)
-            p.x += (p.radius - distance) * a.n_x
-            p.y += (p.radius - distance) * a.n_y
-          end
+      end
+      # collide from bounding planes
+      @planes.each do |a|
+        distance = particle.x * a.n_x + particle.y * a.n_y + a[2]
+        if distance < particle.radius and particle.xvel * a.n_x + particle.yvel * a.n_y < 0
+          # reflect velocity
+          particle.xvel -= (1 + particle.rest_coff) * a.n_x * (particle.xvel * a.n_x + particle.yvel * a.n_y)
+          particle.yvel -= (1 + particle.rest_coff) * a.n_y * (particle.xvel * a.n_x + particle.yvel * a.n_y)
+          particle.x += (particle.radius - distance) * a.n_x
+          particle.y += (particle.radius - distance) * a.n_y
         end
       end
     end
