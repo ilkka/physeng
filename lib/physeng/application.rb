@@ -10,6 +10,7 @@ class Physeng
         p = Trollop::Parser.new do
           opt :gravity, "Toggle gravity", :default => false
           opt :duration, "Simulation duration in seconds (0 for infinite)", :default => 10
+          opt :center, "Toggle center gravity", :default => false
         end
         @opts = Trollop::with_standard_exception_handling p do
           o = p.parse arguments

@@ -32,6 +32,11 @@ class Physeng
         if Physeng::Application.opts[:gravity]
           @yvel += Physeng::Simulation::GRAVITY * (time_elapsed / 1000.0)
         end
+        if Physeng::Application.opts[:center]
+          center_dist = Math.sqrt(@x**2 + @y**2)
+          @xvel += -@x/center_dist * Physeng::Simulation::GRAVITY * (time_elapsed / 1000.0)
+          @yvel += -@y/center_dist * Physeng::Simulation::GRAVITY * (time_elapsed / 1000.0)
+        end
         @x += @xvel * (time_elapsed / 1000.0)
         @y += @yvel * (time_elapsed / 1000.0)
       end
