@@ -5,6 +5,7 @@ class Physeng
     UPDATE_INTERVAL = 30
     GRAVITY = 9.78
     GRAV_CONSTANT = 6.674e-11
+    MUTUAL_GRAV_ADJUSTMENT = 1e8
 
     require 'physeng/simulation/particle'
 
@@ -100,8 +101,8 @@ class Physeng
         force[0] += normal[0] * GRAV_CONSTANT * (particle.mass * other.mass) / dist**2
         force[1] += normal[1] * GRAV_CONSTANT * (particle.mass * other.mass) / dist**2
       end
-      particle.xvel += (force[0]/particle.mass) * (time_elapsed / 1000.0)
-      particle.yvel += (force[1]/particle.mass) * (time_elapsed / 1000.0)
+      particle.xvel += (force[0]/particle.mass) * (time_elapsed / 1000.0) * MUTUAL_GRAV_ADJUSTMENT
+      particle.yvel += (force[1]/particle.mass) * (time_elapsed / 1000.0) * MUTUAL_GRAV_ADJUSTMENT
     end
 
     def collide(particle)
