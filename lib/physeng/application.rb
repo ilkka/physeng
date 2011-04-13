@@ -13,6 +13,7 @@ class Physeng
           opt :center, "Toggle center gravity", :default => false
           opt :window_size, "Window size (WIDTHxHEIGHT)", :default => "400x400"
           opt :particles, "Number of particles", :default => 10
+          opt :mutual, "Mutual gravity", :default => false
         end
         @opts = Trollop::with_standard_exception_handling p do
           o = p.parse arguments

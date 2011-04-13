@@ -4,6 +4,7 @@ class Physeng
   class Simulation
     UPDATE_INTERVAL = 30
     GRAVITY = 9.78
+    GRAV_CONSTANT = 6.674 * 10**-11
 
     require 'physeng/simulation/particle'
 
@@ -75,6 +76,7 @@ class Physeng
     def apply_forces(particle, time_elapsed)
       apply_gravity_down(particle, time_elapsed) if @opts[:gravity]
       apply_gravity_to_origin(particle, time_elapsed) if @opts[:center]
+      apply_mutual_gravity(particle, time_elapsed) if @opts[:mutual]
     end
 
     def apply_gravity_down(particle, time_elapsed)
@@ -85,6 +87,21 @@ class Physeng
       center_dist = Math.sqrt(particle.x**2 + particle.y**2)
       particle.xvel += -particle.x/center_dist * Physeng::Simulation::GRAVITY * (time_elapsed / 1000.0)
       particle.yvel += -particle.y/center_dist * Physeng::Simulation::GRAVITY * (time_elapsed / 1000.0)
+    end
+
+    def apply_mutual_gravity(particle, time_elapsed)
+      force = [0, 0]
+      @particles.reject {|o| o == particle}.each do |other|
+        dist = Math.sqrt((other.x - particle.x)**2 + (other.y - particle.y)**2)
+        normal = [
+          (other.x - particle.x) / dist,
+          (other.y - particle.y) / dist
+        ]
+        force[0] += normal[0] * GRAV_CONSTANT * (particle.mass * other.mass) / dist**2
+        force[1] += normal[1] * GRAV_CONSTANT * (particle.mass * other.mass) / dist**2
+      end
+      particle.xvel += (force[0]/particle.mass) * (time_elapsed / 1000.0)
+      particle.yvel += (force[1]/particle.mass) * (time_elapsed / 1000.0)
     end
 
     def collide(particle)
