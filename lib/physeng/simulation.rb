@@ -95,8 +95,8 @@ class Physeng
             # reflect velocity
             p.xvel -= (1 + p.rest_coff) * a.n_x * (p.xvel * a.n_x + p.yvel * a.n_y)
             p.yvel -= (1 + p.rest_coff) * a.n_y * (p.xvel * a.n_x + p.yvel * a.n_y)
-            p.x += (-distance + p.radius) * a.n_x
-            p.y += (-distance + p.radius) * a.n_y
+            p.x += (p.radius - distance) * a.n_x
+            p.y += (p.radius - distance) * a.n_y
           end
         end
       end
