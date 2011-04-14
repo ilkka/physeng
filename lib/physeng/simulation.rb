@@ -8,6 +8,7 @@ class Physeng
     MUTUAL_GRAV_ADJUSTMENT = 1e8
 
     require 'physeng/simulation/particle'
+    require 'physeng/simulation/joint'
 
     Plane = Struct.new :n_x, :n_y, :dist
 
@@ -19,6 +20,9 @@ class Physeng
       @particles = (1..@opts[:particles]).inject([]) do |particles,num|
         particles << random_particle
       end
+      @joints = @particles.each_cons(2).inject([]) {|memo,pair|
+        memo << Physeng::Simulation::Joint.new(pair[0], pair[1])
+      } if @opts[:joints]
       # normal vectors for our bounding planes (3rd component is
       # distance to origin, meaning center of world)
       @planes = [
@@ -40,6 +44,7 @@ class Physeng
           apply_forces particle, elapsed
           collide particle
         end
+        apply_joints(@joints) if @opts[:joints]
         @screen.flip
         break if @opts[:duration] > 0 && SDL::get_ticks > @opts[:duration] * 1000
       end
@@ -147,6 +152,27 @@ class Physeng
             particle.y += (particle.radius - distance) * a.n_y
           end
         end
+      end
+    end
+
+    def paint_joint(joint)
+      screenx1 = (joint.fix1.x + 1.0)/2.0 * @screen.w
+      screeny1 = (joint.fix1.y + 1.0)/2.0 * @screen.h
+      screenx2 = (joint.fix2.x + 1.0)/2.0 * @screen.w
+      screeny2 = (joint.fix2.y + 1.0)/2.0 * @screen.h
+      @screen.draw_line screenx1, screeny1, screenx2, screeny2, @screen.map_rgb(20, 220, 80)
+    end
+
+    def apply_joints(joints)
+      joints.each do |joint|
+        vec = [
+          joint.fix2.x - joint.fix1.x, joint.fix2.y - joint.fix1.y
+        ]
+        distance = Math.sqrt(vec[0]**2 + vec[1]**2)
+        nor = [vec[0] / distance, vec[1] / distance]
+        joint.fix2.x += nor[0] * (joint.length - distance)
+        joint.fix2.y += nor[1] * (joint.length - distance)
+        paint_joint(joint)
       end
     end
   end

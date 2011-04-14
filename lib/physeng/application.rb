@@ -15,6 +15,7 @@ class Physeng
           opt :particles, "Number of particles", :default => 10
           opt :mutual, "Mutual gravity", :default => false
           opt :edges, "Screen edges", :default => true
+          opt :joints, "Joints between particles"
         end
         @opts = Trollop::with_standard_exception_handling p do
           o = p.parse arguments
