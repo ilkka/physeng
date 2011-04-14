@@ -38,6 +38,7 @@ class Physeng
       while true
         elapsed = wait_till_next_frame
         clear_screen
+        @joints.each {|joint| paint_joint joint}
         @particles.each do |particle|
           particle.paint @screen
           particle.move! elapsed
@@ -179,7 +180,6 @@ class Physeng
         nor = [vec[0] / distance, vec[1] / distance]
         joint.fix2.x += nor[0] * (joint.length - distance)
         joint.fix2.y += nor[1] * (joint.length - distance)
-        paint_joint(joint)
       end
     end
   end
