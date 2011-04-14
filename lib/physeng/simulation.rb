@@ -26,10 +26,10 @@ class Physeng
       # normal vectors for our bounding planes (3rd component is
       # distance to origin, meaning center of world)
       @planes = [
-        Plane.new( 1.0,  0.0,  0.8),
-        Plane.new( 0.0, -1.0,  0.8),
-        Plane.new(-1.0,  0.0,  0.8),
-        Plane.new( 0.0,  1.0,  0.8)
+        Plane.new( 1.0,  0.0,  1.0),
+        Plane.new( 0.0, -1.0,  1.0),
+        Plane.new(-1.0,  0.0,  1.0),
+        Plane.new( 0.0,  1.0,  1.0)
       ]
     end
 
