@@ -38,7 +38,7 @@ class Physeng
       while true
         elapsed = wait_till_next_frame
         clear_screen
-        @joints.each {|joint| paint_joint joint}
+        @joints.each {|joint| paint_joint joint} if @joints
         @particles.each do |particle|
           particle.paint @screen
           particle.move! elapsed
